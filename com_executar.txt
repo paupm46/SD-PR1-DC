@@ -1,9 +1,11 @@
 Per executar:
 1 - cd PycharmProjects/SD-PR1/
 2 - redis-server
-3 - python3 compute_server.py
-4 - python3 load_balancer.py
-5 - python3 air_sensor.py   //  pollution_sensor.py
+3 - python3 terminal.py
+3 - python3 proxy.py
+4 - python3 compute_server.py
+5 - python3 load_balancer.py
+6 - python3 air_sensor.py   //  pollution_sensor.py
 
 Instal·lar Redis:
 - pip install redis
@@ -11,6 +13,7 @@ Instal·lar Redis:
 Si es canvia el .proto s'ha d'executar:
 python3 -m grpc_tools.protoc -I=./ --python_out=. --grpc_python_out=. --pyi_out=. sensorLBCom.proto
 python3 -m grpc_tools.protoc -I=./ --python_out=. --grpc_python_out=. --pyi_out=. LBComputeServerCom.proto
+python3 -m grpc_tools.protoc -I=./ --python_out=. --grpc_python_out=. --pyi_out=. proxyTerminalCom.proto
 
 Perque funcioni el timestamp he fet varies coses i de sobte ha anat:
 - sudo apt update

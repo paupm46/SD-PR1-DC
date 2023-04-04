@@ -22,4 +22,4 @@ while True:
     timestamp.GetCurrentTime()
     data = sensorLBCom_pb2.RawPollutionData(id='Pollution Sensor', co2=pollution_data['co2'], timestamp=timestamp)
     stub.send_pollution_data(data)
-    #print(meteo_data)
+    #print(data)

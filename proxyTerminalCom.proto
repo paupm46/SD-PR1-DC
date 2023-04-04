@@ -1,0 +1,13 @@
+syntax = "proto3";
+import "google/protobuf/empty.proto";
+import "google/protobuf/timestamp.proto";
+
+message Coefficients {
+  float wellness_mean = 1;
+  float pollution_mean = 2;
+  google.protobuf.Timestamp timestamp = 3;
+}
+
+service TerminalService {
+  rpc send_results (Coefficients) returns (google.protobuf.Empty) {}
+}
