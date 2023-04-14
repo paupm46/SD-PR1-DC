@@ -42,32 +42,6 @@ class ComputeServerServicer(LBComputeServerCom_pb2_grpc.ComputeServerServiceServ
         response = LBComputeServerCom_pb2.google_dot_protobuf_dot_empty__pb2.Empty()
         return response
 
-"""
-# create a gRPC server
-server = grpc.server(futures.ThreadPoolExecutor(max_workers=10))
-
-# use the generated function `add_LBServiceServicer_to_server`
-# to add the defined class to the server
-LBComputeServerCom_pb2_grpc.add_ComputeServerServiceServicer_to_server(ComputeServerServicer(), server)
-
-# listen on port 50052
-print('Starting server. Listening on port 50052.')
-server.add_insecure_port('0.0.0.0:50052')
-server.start()
-
-
-# create a gRPC server
-server2 = grpc.server(futures.ThreadPoolExecutor(max_workers=10))
-
-# use the generated function `add_LBServiceServicer_to_server`
-# to add the defined class to the server
-LBComputeServerCom_pb2_grpc.add_ComputeServerServiceServicer_to_server(ComputeServerServicer(), server2)
-
-# listen on port 50053
-print('Starting server. Listening on port 50053.')
-server2.add_insecure_port('0.0.0.0:50053')
-server2.start()
-"""
 
 nCS = 3
 servers = []

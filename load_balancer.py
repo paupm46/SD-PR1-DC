@@ -36,19 +36,19 @@ class LoadBalancerServicer(sensorLBCom_pb2_grpc.LBServiceServicer):
     i = 0
 
     def send_meteo_data(self, meteo_data, context):
-        #print(meteo_data)
-        #print(meteo_data.timestamp.ToDatetime())
+        print(meteo_data)
+        print(meteo_data.timestamp.ToDatetime())
         #data = LBComputeServerCom_pb2.RawMeteoData2(id=meteo_data.id, temperature=meteo_data.temperature, humidity=meteo_data.humidity, timestamp=meteo_data.timestamp)
         self.i = (self.i + 1) % nCS
-        stubs[self.i].process_meteo_data(meteo_data)
+        stubs[self.i].process_meteo_data.future(meteo_data)
         response = sensorLBCom_pb2.google_dot_protobuf_dot_empty__pb2.Empty()
         return response
 
     def send_pollution_data(self, pollution_data, context):
-        #print(pollution_data)
-        #print(pollution_data.timestamp.ToDatetime())
+        print(pollution_data)
+        print(pollution_data.timestamp.ToDatetime())
         self.i = (self.i + 1) % nCS
-        stubs[self.i].process_pollution_data(pollution_data)
+        stubs[self.i].process_pollution_data.future(pollution_data)
         response = sensorLBCom_pb2.google_dot_protobuf_dot_empty__pb2.Empty()
         return response
 
