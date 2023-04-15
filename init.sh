@@ -15,7 +15,7 @@ do
         if [ "$terminal_name" = "terminal" ]; then
             command="${commands[$i]} $j"
         fi
-        gnome-terminal --tab --working-directory=/home/milax/PycharmProjects/SD-PR1/ -- bash -c "printf '\033]0;%s\007' '$terminal_name'; $command; exec bash"
+        gnome-terminal --tab --working-directory=$(dirname -- "$(readlink -f -- "$0")";) -- bash -c "printf '\033]0;%s\007' '$terminal_name'; $command; exec bash"
     done
     sleep 0.1
 done

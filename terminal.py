@@ -14,27 +14,16 @@ timestamps = []
 
 
 class TerminalServicer(proxyTerminalCom_pb2_grpc.TerminalServiceServicer):
-    """
-    def __init__(self):
-        self.wellness_means = []
-        self.pollution_means = []
-        self.timestamps = []
-    """
-
-    def send_results(self, coefficients, context):
-        print(
-            coefficients)  # Aqui s'ha de fer Terminals must represent the data they receive in real time through a simple, visual user interface
-        global wellness_means
+    def send_results(self, coefficients, context): # Procedimiento llamado por el proxy
+        # Añadir a las respectivas listas los coeficientes (y timestamp) recibidos
+        global wellness_means, pollution_means, timestamps
         wellness_means.append(coefficients.wellness_mean)
-        global pollution_means
         pollution_means.append(coefficients.pollution_mean)
-        global timestamps
         cet_tz = pytz.timezone('CET')
         utc_tz = pytz.timezone('UTC')
         utc_now = coefficients.timestamp.ToDatetime()
         timestamps.append(utc_tz.localize(utc_now).astimezone(cet_tz).strftime('%H:%M:%S.%f'))
-        #timestamps.append(coefficients.timestamp.ToDatetime().strftime('%H:%M:%S.%f'))
-        animate(timestamps, wellness_means, pollution_means)
+        animate() # Actualizar gráfica
         response = proxyTerminalCom_pb2.google_dot_protobuf_dot_empty__pb2.Empty()
         return response
 
@@ -58,7 +47,8 @@ ax = plt.subplot(121)
 ax2 = plt.subplot(122)
 
 
-def animate(timestamps, wellness_means, pollution_means):
+def animate(): # Procedimiento para actualizar gráfica
+    global wellness_means, pollution_means, timestamps
     timestamps = timestamps[-20:]
     wellness_means = wellness_means[-20:]
     pollution_means = pollution_means[-20:]

@@ -8,42 +8,39 @@ import redis
 import LBComputeServerCom_pb2
 import LBComputeServerCom_pb2_grpc
 
+
 class MeteoData:
     def __init__(self, temperature, humidity):
         self.temperature = temperature
         self.humidity = humidity
 
+
 class PollutionData:
     def __init__(self, co2):
         self.co2 = co2
 
+
 processor = MeteoDataProcessor()
+
 r = redis.Redis(host='localhost', port=6379, db=0)
+
 
 class ComputeServerServicer(LBComputeServerCom_pb2_grpc.ComputeServerServiceServicer):
 
-    def process_meteo_data(self, meteo_data, context):
-        #print(meteo_data)
-        wellness_data = processor.process_meteo_data(MeteoData(meteo_data.temperature, meteo_data.humidity))
-        print(wellness_data)
-        print(meteo_data.timestamp.ToNanoseconds())
-        r.set("m-"+str(meteo_data.timestamp.ToNanoseconds()), str(wellness_data))
-        #value = r.get("m-"+str(meteo_data.timestamp.ToNanoseconds()))
-        #print(value)
+    def process_meteo_data(self, meteo_data, context): # Procedimiento llamado por el load balancer
+        wellness_data = processor.process_meteo_data(MeteoData(meteo_data.temperature, meteo_data.humidity)) # Procesar meteo data del air sensor
+        r.set("m-"+str(meteo_data.timestamp.ToNanoseconds()), str(wellness_data)) # Guardar valor obtenido con la clave m-timestamp en Redis
         response = LBComputeServerCom_pb2.google_dot_protobuf_dot_empty__pb2.Empty()
         return response
 
-    def process_pollution_data(self, pollution_data, context):
-        #print(pollution_data)
-        p_data = processor.process_pollution_data(PollutionData(pollution_data.co2))
-        print(pollution_data.timestamp.ToNanoseconds())
-        print(p_data)
-        r.set("p-" + str(pollution_data.timestamp.ToNanoseconds()), str(p_data))
+    def process_pollution_data(self, pollution_data, context): # Procedimiento llamado por el load balancer
+        p_data = processor.process_pollution_data(PollutionData(pollution_data.co2)) # Procesar pollution data del pollution sensor
+        r.set("p-" + str(pollution_data.timestamp.ToNanoseconds()), str(p_data)) # Guardar valor obtenido con la clave p-timestamp en Redis
         response = LBComputeServerCom_pb2.google_dot_protobuf_dot_empty__pb2.Empty()
         return response
 
-
-nCS = 3
+# Crear servidores gRPC
+nCS = 3 # Número de compute servers a crear
 servers = []
 for x in range(nCS):
     server = grpc.server(futures.ThreadPoolExecutor(max_workers=10))

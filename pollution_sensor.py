@@ -17,9 +17,8 @@ stub = sensorLBCom_pb2_grpc.LBServiceStub(channel)
 
 while True:
     time.sleep(1.0)
-    pollution_data = detector.analyze_pollution()
+    pollution_data = detector.analyze_pollution() # Generar dato de polución
     timestamp = Timestamp()
-    timestamp.FromNanoseconds(time.time_ns())
-    data = sensorLBCom_pb2.RawPollutionData(id='Pollution Sensor', co2=pollution_data['co2'], timestamp=timestamp)
-    stub.send_pollution_data(data)
-    #print(data)
+    timestamp.FromNanoseconds(time.time_ns()) # Crear timestamp actual
+    data = sensorLBCom_pb2.RawPollutionData(id='Pollution Sensor', co2=pollution_data['co2'], timestamp=timestamp) # Crear parámetro gRPC
+    stub.send_pollution_data(data) # Enviar datos a load balancer
